@@ -6,7 +6,59 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(haven)
+
+```
+
+problem 1
+```{r}
+sheet = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", na = c("",  "."))
+sheet = select(sheet, -...15, -...16, -...17)
+sheet = janitor::clean_names(sheet)
+
+sheet_omit_dumpster = filter(sheet, dumpster >0)
+sheet_omit_dumpster = mutate(
+    sheet_omit_dumpster,
+    sports_balls = round(sports_balls)
+    
+  )
+```
+
+select 2018 and 2019
+
+```{r}
+sheet_2018and2019 =  filter(sheet_omit_dumpster, year == "2018" |year =="2019" )
+
+
+```
+
+
+
+
+Problem2
+
+##clean pols and seperate date to three variables.
+```{r}
+ pols = read_csv("./data/pols-month.csv")%>%
+ separate(mon, into =c("year", "month","day"), sep = c(4,7))
+ pols$year =as.integer(pols$year)
+ pols = separate(pols, month, into = c("useless","month"), sep = 1)
+ pols$month =as.integer(pols$month)
+ pols$month =month.name[pols$month]
+ 
+ 
+```
+
+##create president
+```{r}
+pols = mutate(
+  pols, 
+  president = pols$prez_gop + pols$gov_gop+ pols$sen_gop+ pols$rep_gop+ pols$prez_dem+ pols$gov_dem+pols$sen_dem+pols$rep_dem
+ )
+
+pols = select(pols, -prez_dem, -prez_gop)
 ```
 
 

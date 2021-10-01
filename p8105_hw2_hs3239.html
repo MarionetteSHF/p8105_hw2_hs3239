@@ -171,7 +171,58 @@ pre code {
 </div>
 
 
+<p>problem 1</p>
+<pre class="r"><code>sheet = read_excel(&quot;./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx&quot;, na = c(&quot;&quot;,  &quot;.&quot;))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...15
+## * `` -&gt; ...16
+## * `` -&gt; ...17</code></pre>
+<pre class="r"><code>sheet = select(sheet, -...15, -...16, -...17)
+sheet = janitor::clean_names(sheet)</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): strings not representable in native encoding will
+## be translated to UTF-8</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00C4&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00D6&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00E4&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00F6&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00DF&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00C6&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00E6&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00D8&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00F8&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00C5&gt;&#39; to native encoding</code></pre>
+<pre><code>## Warning in FUN(X[[i]], ...): unable to translate &#39;&lt;U+00E5&gt;&#39; to native encoding</code></pre>
+<pre class="r"><code>sheet_omit_dumpster = filter(sheet, dumpster &gt;0)
+sheet_omit_dumpster = mutate(
+    sheet_omit_dumpster,
+    sports_balls = round(sports_balls)
+    
+  )</code></pre>
+<p>select 2018 and 2019</p>
+<pre class="r"><code>sheet_2018and2019 =  filter(sheet_omit_dumpster, year == &quot;2018&quot; |year ==&quot;2019&quot; )</code></pre>
+<p>Problem2</p>
+<p>##clean pols and seperate date to three variables.</p>
+<pre class="r"><code> pols = read_csv(&quot;./data/pols-month.csv&quot;)%&gt;%
+ separate(mon, into =c(&quot;year&quot;, &quot;month&quot;,&quot;day&quot;), sep = c(4,7))</code></pre>
+<pre><code>## Rows: 822 Columns: 9</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl  (8): prez_gop, gov_gop, sen_gop, rep_gop, prez_dem, gov_dem, sen_dem, r...
+## date (1): mon</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code> pols$year =as.integer(pols$year)
+ pols = separate(pols, month, into = c(&quot;useless&quot;,&quot;month&quot;), sep = 1)
+ pols$month =as.integer(pols$month)
+ pols$month =month.name[pols$month]</code></pre>
+<p>##create president</p>
+<pre class="r"><code>pols = mutate(
+  pols, 
+  president = pols$prez_gop + pols$gov_gop+ pols$sen_gop+ pols$rep_gop+ pols$prez_dem+ pols$gov_dem+pols$sen_dem+pols$rep_dem
+ )
 
+pols = select(pols, -prez_dem, -prez_gop)</code></pre>
 
 
 
