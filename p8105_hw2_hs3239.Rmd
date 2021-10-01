@@ -147,6 +147,47 @@ Summary: pols dataset has 822 observations and 3 variables. snp dataset has 787 
 
 P3
 
+```{r}
+PBaby = 
+  read.csv(file = "./data/Popular_Baby_Names.csv")%>%
+  janitor::clean_names()%>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity),
+    child_s_first_name = str_to_lower(child_s_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"),
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"),
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+    ) %>% distinct()
 
+head(PBaby)
+```
+
+Olivia rank table
+```{r}
+Olivia = filter(PBaby, gender == "female", child_s_first_name == "olivia")%>%
+  select(year_of_birth, ethnicity, rank)%>%
+  arrange(rank)%>% 
+  pivot_wider(
+    names_from = "year_of_birth", 
+    values_from = "rank")
+
+knitr::kable(Olivia, format = "html", caption = "Olivia rank through years")
+
+
+```
+
+
+```{r}
+male_name =filter(PBaby, gender == "male", rank == "1")%>%
+  select(year_of_birth, ethnicity, child_s_first_name)%>%
+  pivot_wider(
+    names_from = "year_of_birth", 
+    values_from = "child_s_first_name")
+
+knitr::kable(male_name, format = "html", caption = "Olivia rank through years")
+
+
+```
 
 
