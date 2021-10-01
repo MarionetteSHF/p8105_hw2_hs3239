@@ -14,7 +14,7 @@ library(haven)
 
 problem 1
 ```{r}
-sheet = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", na = c("",  "."))
+sheet = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", na = c("",  "."),sheet = "Mr. Trash Wheel")
 sheet = select(sheet, -...15, -...16, -...17)
 sheet = janitor::clean_names(sheet)
 
@@ -24,12 +24,44 @@ sheet_omit_dumpster = mutate(
     sports_balls = round(sports_balls)
     
   )
+sheet_omit_dumpster
 ```
 
 select 2018 and 2019
 
 ```{r}
-sheet_2018and2019 =  filter(sheet_omit_dumpster, year == "2018" |year =="2019" )
+rain2019 = read_excel(
+    "data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+    sheet = "2019 Precipitation",
+    range = "A2:B14"
+    ) %>%
+  mutate(year = "2019") %>% 
+  janitor::clean_names()
+rain2019 = filter(rain2019, total >0)
+
+rain2018 = read_excel(
+    "data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+    sheet = "2018 Precipitation",
+    range = "A2:B14"
+    ) %>%
+  mutate(year = "2018") %>% 
+  janitor::clean_names()
+  
+rain_combination = 
+  bind_rows(rain2019, rain2018) %>%
+  mutate(month = month.name[month]) %>% 
+  select(year, month, total_inch = total)
+
+rain_combination
+
+```
+Summary: There are 344 observations of Mr. Trash Wheel dataset after clean and 
+filtration. There are 18 observations of rainfall in 2018 and 2019  after filtering missing values.The total precipitation in 2018 is               `r sum(rain2018$total) ` and the median of the sports balls in 2017 is 8
+
+
+
+
+```{r}
 
 
 ```
@@ -47,8 +79,9 @@ Problem2
  pols = separate(pols, month, into = c("useless","month"), sep = 1)
  pols$month =as.integer(pols$month)
  pols$month =month.name[pols$month]
+   pols=select(pols, -useless)
  
- 
+
 ```
 
 ##create president
@@ -58,7 +91,62 @@ pols = mutate(
   president = pols$prez_gop + pols$gov_gop+ pols$sen_gop+ pols$rep_gop+ pols$prez_dem+ pols$gov_dem+pols$sen_dem+pols$rep_dem
  )
 
-pols = select(pols, -prez_dem, -prez_gop)
+pols = select(pols, -prez_dem, -prez_gop, -day)
+
+ head(pols)
 ```
+
+##snp
+```{r}
+ snp = read.csv("./data/snp.csv")%>%
+ separate(date, into =c("month", "day","year"), sep = c(1,-4))
+
+ snp$year =as.integer(snp$year)
+ 
+ snp$month =as.integer(snp$month)
+ snp$month =month.name[snp$month]
+ snp = select(snp, -day)%>%
+   relocate(year,month)%>%
+   arrange(year,month)
+ 
+head(snp)
+```
+
+
+```{r}
+unemp = 
+  read.csv(file = "./data/unemployment.csv") %>%
+  
+  pivot_longer(
+    Jan:Dec,
+    names_to = "month",
+    values_to = "percentage"
+  ) %>%
+janitor::clean_names()%>%
+  mutate(month = month.name[match(pull(., month), month.abb)],
+         year = as.integer(year)) 
+ 
+
+head(unemp)
+
+```
+
+
+combine three tables
+
+```{r}
+combine_three = left_join(pols, snp, by = c("year", "month")) %>% 
+  left_join(unemp, by = c("year", "month")) %>% 
+  drop_na(close, percentage)
+
+head(combine_three)
+```
+Summary: pols dataset has 822 observations and 3 variables. snp dataset has 787 observatons and 3 variables. unempoly dataset has 816 data set. There are
+786 observations and 12 variables after combination. 
+
+
+P3
+
+
 
 
