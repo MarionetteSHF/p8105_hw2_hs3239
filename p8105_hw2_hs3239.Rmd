@@ -191,3 +191,19 @@ knitr::kable(male_name, format = "html", caption = "Olivia rank through years")
 ```
 
 
+
+```{r}
+male_white_nohis = filter(PBaby, year_of_birth== "2016",
+                          gender == "male",
+                          ethnicity == "white non hispanic") 
+male_white_nohis=   select(male_white_nohis,rank, count)
+
+
+ggplot(male_white_nohis, aes(x = rank, y = count)) + 
+  geom_point() +
+  labs(
+    title = "Baby boy name popularity plot",
+    x = "Rank in popularity of a name",
+    y = "Number of children with a name"
+  )
+```
