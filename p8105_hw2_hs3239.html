@@ -172,7 +172,7 @@ pre code {
 
 
 <p>problem 1</p>
-<pre class="r"><code>sheet = read_excel(&quot;./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx&quot;, na = c(&quot;&quot;,  &quot;.&quot;),sheet = &quot;Mr. Trash Wheel&quot;)</code></pre>
+<pre class="r"><code>sheet = read_excel(&quot;./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx&quot;, na = c(&quot;&quot;,  &quot;.&quot;),sheet = &quot;Mr. Trash Wheel&quot;)</code></pre>
 <pre><code>## New names:
 ## * `` -&gt; ...15
 ## * `` -&gt; ...16
@@ -199,26 +199,26 @@ sheet_omit_dumpster = mutate(
     
   )
 sheet_omit_dumpster</code></pre>
-<pre><code>## # A tibble: 344 x 14
+<pre><code>## # A tibble: 454 x 14
 ##    dumpster month  year date                weight_tons volume_cubic_yards
-##       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;                    &lt;dbl&gt;              &lt;dbl&gt;
-##  1        1 May    2014 2014-05-16 00:00:00        4.31                 18
-##  2        2 May    2014 2014-05-16 00:00:00        2.74                 13
-##  3        3 May    2014 2014-05-16 00:00:00        3.45                 15
-##  4        4 May    2014 2014-05-17 00:00:00        3.1                  15
-##  5        5 May    2014 2014-05-17 00:00:00        4.06                 18
-##  6        6 May    2014 2014-05-20 00:00:00        2.71                 13
-##  7        7 May    2014 2014-05-21 00:00:00        1.91                  8
-##  8        8 May    2014 2014-05-28 00:00:00        3.7                  16
-##  9        9 June   2014 2014-06-05 00:00:00        2.52                 14
-## 10       10 June   2014 2014-06-11 00:00:00        3.76                 18
-## # ... with 334 more rows, and 8 more variables: plastic_bottles &lt;dbl&gt;,
+##    &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dttm&gt;                    &lt;dbl&gt;              &lt;dbl&gt;
+##  1 1        May    2014 2014-05-16 00:00:00        4.31                 18
+##  2 2        May    2014 2014-05-16 00:00:00        2.74                 13
+##  3 3        May    2014 2014-05-16 00:00:00        3.45                 15
+##  4 4        May    2014 2014-05-17 00:00:00        3.1                  15
+##  5 5        May    2014 2014-05-17 00:00:00        4.06                 18
+##  6 6        May    2014 2014-05-20 00:00:00        2.71                 13
+##  7 7        May    2014 2014-05-21 00:00:00        1.91                  8
+##  8 8        May    2014 2014-05-28 00:00:00        3.7                  16
+##  9 9        June   2014 2014-06-05 00:00:00        2.52                 14
+## 10 10       June   2014 2014-06-11 00:00:00        3.76                 18
+## # ... with 444 more rows, and 8 more variables: plastic_bottles &lt;dbl&gt;,
 ## #   polystyrene &lt;dbl&gt;, cigarette_butts &lt;dbl&gt;, glass_bottles &lt;dbl&gt;,
 ## #   grocery_bags &lt;dbl&gt;, chip_bags &lt;dbl&gt;, sports_balls &lt;dbl&gt;,
 ## #   homes_powered &lt;dbl&gt;</code></pre>
 <p>select 2018 and 2019</p>
 <pre class="r"><code>rain2019 = read_excel(
-    &quot;data/Trash-Wheel-Collection-Totals-8-6-19.xlsx&quot;,
+    &quot;data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx&quot;,
     sheet = &quot;2019 Precipitation&quot;,
     range = &quot;A2:B14&quot;
     ) %&gt;%
@@ -227,7 +227,7 @@ sheet_omit_dumpster</code></pre>
 rain2019 = filter(rain2019, total &gt;0)
 
 rain2018 = read_excel(
-    &quot;data/Trash-Wheel-Collection-Totals-8-6-19.xlsx&quot;,
+    &quot;data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx&quot;,
     sheet = &quot;2018 Precipitation&quot;,
     range = &quot;A2:B14&quot;
     ) %&gt;%
@@ -240,7 +240,7 @@ rain_combination =
   select(year, month, total_inch = total)
 
 rain_combination</code></pre>
-<pre><code>## # A tibble: 18 x 3
+<pre><code>## # A tibble: 24 x 3
 ##    year  month     total_inch
 ##    &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
 ##  1 2019  January         3.1 
@@ -249,19 +249,12 @@ rain_combination</code></pre>
 ##  4 2019  April           1.46
 ##  5 2019  May             3.58
 ##  6 2019  June            0.42
-##  7 2018  January         0.94
-##  8 2018  February        4.8 
-##  9 2018  March           2.69
-## 10 2018  April           4.69
-## 11 2018  May             9.27
-## 12 2018  June            4.77
-## 13 2018  July           10.2 
-## 14 2018  August          6.45
-## 15 2018  September      10.5 
-## 16 2018  October         2.12
-## 17 2018  November        7.82
-## 18 2018  December        6.11</code></pre>
-<p>Summary: There are 344 observations of Mr. Trash Wheel dataset after clean and filtration. There are 18 observations of rainfall in 2018 and 2019 after filtering missing values.The total precipitation in 2018 is 70.33 and the median of the sports balls in 2017 is 8</p>
+##  7 2019  July            3.85
+##  8 2019  August          2.39
+##  9 2019  September       0.16
+## 10 2019  October         5.45
+## # ... with 14 more rows</code></pre>
+<p>Summary: There are 344 observations of Mr. Trash Wheel dataset after clean and filtration. There are 18 observations of rainfall in 2018 and 2019 after filtering missing values.The total precipitation in 2018 is 70.33 and the median of the sports balls in 2017 is 8. The key variables are total in precipitation sheet and month and year are important variables to analyse data.</p>
 <p>Problem2</p>
 <p>##clean pols and seperate date to three variables.</p>
 <pre class="r"><code> pols = read_csv(&quot;./data/pols-month.csv&quot;)%&gt;%
